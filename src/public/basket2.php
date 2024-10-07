@@ -4,24 +4,24 @@
 //if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action'])) {
 //    switch ($_GET['action']) {
 //        case 'add':
-//            $id = $_GET['id'];
-//            $query = "SELECT * FROM products WHERE id = $id";
-//            $result = $conn->query($query);
-//            $product = $result->fetch_assoc();
+            $id = $_GET['id'];
+            $query = "SELECT * FROM products WHERE id = $id";
+            $result = $conn->query($query);
+            $product = $result->fetch_assoc();
 //
-//            if (!isset($_SESSION['cart'])) {
-//                $_SESSION['cart'] = [];
-//            }
-//
-//            if (isset($_SESSION['cart'][$id])) {
-//                $_SESSION['cart'][$id]['quantity']++;
-//            } else {
-//                $_SESSION['cart'][$id] = [
-//                    'name' => $product['name'],
-//                    'price' => $product['price'],
-//                    'quantity' => 1
-//                ];
-//            }
+            if (!isset($_SESSION['cart'])) {
+                $_SESSION['cart'] = [];
+            }
+
+            if (isset($_SESSION['cart'][$id])) {
+                $_SESSION['cart'][$id]['quantity']++;
+            } else {
+                $_SESSION['cart'][$id] = [
+                    'name' => $product['name'],
+                    'price' => $product['price'],
+                    'quantity' => 1
+                ];
+            }
 //
 //            header('Location: cart.php');
 //            break;

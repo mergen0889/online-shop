@@ -3,19 +3,32 @@ session_start();
 if (!isset($_SESSION['user_id'])) {
     header("location: /add-product");
 }
-if (isset($_POST['product_id'])) {
-    $productID = $_POST['product_id'];
-}
-$pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-$stmt = $pdo->query("SELECT * FROM user_products WHERE product_id = '1'");
+$user_id = $_SESSION['user_id'];
+//$user_id = $_POST['user_id'];
+//if (isset($_POST['product_id'])) {
+   // $_POST['product_id'] = [];
+    $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
 
-$products = $stmt->fetch();
 
+    $stmt = $pdo->prepare("SELECT product_id FROM user_products WHERE user_id = :user_id");
+    $stmt->execute(['user_id' => $user_id]);
+    $products = $stmt->fetchAll();
+
+    $res = [];
+
+    foreach ($products as $product) {
+        $productId = $product['product_id'];
+        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
+        $stmt->execute(['productId' => $productId]);
+        $res[] = $stmt->fetch();
+
+    }
+
+//}
 ?>
 
-
 <div class="container">
-    <h2>Shopping Basket </h2>
+    <h2>Catalog </h2>
 
     <div class="card-deck">
 
@@ -23,14 +36,14 @@ $products = $stmt->fetch();
             <div class="card text-center">
                 <a href="#">
                     <div class="card-header">
-                        Hit!<?php echo $product['product_id']; ?>
+                        Hit!<?php echo $product['categories']; ?>
                     </div>
-<!--                    <img class="card-img-top" src="--><?php //echo $product['image_link'];?><!--" alt="Card image" >-->
+                    <img class="card-img-top" src="<?php echo $product['image_link'];?>" alt="Card image" >
                     <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product['amount']; ?></p>
+                        <p class="card-text text-muted"><?php echo $product['name']; ?></p>
 
                         <div class="card-footer">
-                            <?php echo $product['user_id'].'руб.'; ?>
+                            <?php echo $product['price'].'руб.'; ?>
                         </div>
                     </div>
                 </a>

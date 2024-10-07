@@ -1,7 +1,8 @@
 <?php
 
-//function authentication(): array
-//{
+//echo session_id();
+
+
 $errors = [];
 
 if (isset($_POST['login'])) {
@@ -37,7 +38,10 @@ if (empty($errors)) {
         $hashDb = $data['password'];
 
         if(password_verify($password, $hashDb)) {
-            setcookie('user_id', $data['id']);
+//            setcookie('user_id', $data['id']);
+            session_start();
+            $_SESSION['user_id'] = $data['id'];
+            header("location: /catalog");
         } else {
             $errors['login'] = 'Пароль или логин неверный';
         }
@@ -46,4 +50,6 @@ if (empty($errors)) {
 }
 
 require_once './get_login.php';
+
+
 ?>

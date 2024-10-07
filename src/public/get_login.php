@@ -1,6 +1,6 @@
-<form action="handle_login.php" method="post">
+<form action="/login" method="POST">
     <div class="imgcontainer">
-        <img src="img_avatar2.png" alt="Avatar" class="avatar">
+        <img src="https://img.freepik.com/free-photo/cute-rat-wearing-clothes-in-studio_23-2150840963.jpg?w=740&t=st=1728104220~exp=1728104820~hmac=bedd48c1268f3c80052fd5669483ff5539095a61746a2d54a2bf46bc5b4e0785" alt="Avatar" class="avatar">
     </div>
 
     <div class="container">
@@ -11,7 +11,7 @@
 
         <label for="psw"><b>Password</b></label>
         <label style="color: darkred">
-        <?php // echo $errors['psw'] ?? ''; ?> </label>
+        <?php  echo $errors['psw'] ?? ''; ?> </label>
         <input type="password" placeholder="Enter Password" name="psw" required>
 
         <button type="submit">Login</button>
@@ -50,7 +50,7 @@
         margin: 8px 0;
         border: none;
         cursor: pointer;
-        width: 100%;
+        width: 40%;
     }
 
     /* Add a hover effect for buttons */

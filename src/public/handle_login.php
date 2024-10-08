@@ -1,8 +1,5 @@
 <?php
 
-//echo session_id();
-
-
 $errors = [];
 
 if (isset($_POST['login'])) {
@@ -16,14 +13,9 @@ if (isset($_POST['psw'])) {
 } else {
     $errors['psw'] = 'Логин или пароль неверный';
 }
-//    } return $errors;
-//}
 
-//$errors = authentication();
 
 if (empty($errors)) {
-//    $login = $_POST['login'];
-//    $password = $_POST['psw'];
 
     $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
 

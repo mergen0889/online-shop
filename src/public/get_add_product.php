@@ -9,13 +9,13 @@
             <?php echo $errors['product_id'] ?? ''; ?>
             <?php echo $errors['user_id'] ?? ''; ?>
             <?php echo $add ?? ''; ?>
-            <?php echo $err ?? ''; ?> </label>
+            <?php //echo $err ?? ''; ?> </label>
         <input type="text" placeholder="Enter product-id" name="product_id" required>
 
         <label for="amount"><b>Amount</b></label>
         <label style="color: darkred">
             <?php  echo $errors['amount'] ?? ''; ?>
-            <?php echo $errors['product_id'] ?? ''; ?> </label>
+            <?php //echo $errors['product_id'] ?? ''; ?> </label>
         <input type="amount" placeholder="Enter amount" name="amount" required>
 
         <button type="submit">Add to basket</button>

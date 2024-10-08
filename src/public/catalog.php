@@ -11,7 +11,6 @@ $products = $stmt->fetchAll();
 
 ?>
 
-
     <div class="container">
     <h2>Catalog </h2>
 

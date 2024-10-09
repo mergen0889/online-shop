@@ -1,36 +1,9 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("location: /add-product");
-}
-$user_id = $_SESSION['user_id'];
 
-$pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-$stmt = $pdo->prepare("SELECT products.name AS product_name, products.image_link, products.categories, products.price, users.name AS user_name, user_products.amount
-        FROM user_products
-        JOIN users ON users.id = user_products.user_id
-        JOIN products ON products.id = user_products.product_id
-        WHERE user_products.user_id = :user_id");
-
-$stmt->execute(['user_id' => $user_id]);
-$products = $stmt->fetchAll();
-
-//    $stmt = $pdo->prepare("SELECT (product_id) FROM user_products WHERE user_id = :user_id");
-//    $stmt->execute(['user_id' => $user_id]);
-//    $products = $stmt->fetchAll();
-
-//    $res = [];
-
-//    foreach ($products as $product) {
-//        $productId = $product['product_id'];
-
-//        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
-//        $stmt->execute(['productId' => $productId]);
-//        $res[] = $stmt->fetch();
-
-//    }
-
-
+require_once './classes/Product.php';
+$basket = new Product();
+$basket->basket();
+$products = $basket->products;
 ?>
 
 <div class="container">

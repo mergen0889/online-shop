@@ -1,13 +1,9 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("location: /login");
-}
 
-$pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-$stmt = $pdo->query("SELECT * FROM products");
-
-$products = $stmt->fetchAll();
+require_once './classes/Product.php';
+$catalog = new Product();
+$catalog->catalog();
+$products = $catalog->products;
 
 ?>
 

@@ -1,10 +1,12 @@
 <?php
-class User
+class UserController
 {
+    public function getRegistrateForm()
+    {
+        require_once './../View/registrate.php';
+    }
     public function registrate()
     {
-        //$this->validate();
-
         $errors = $this->validate();
 
         if(empty($errors)) {
@@ -12,20 +14,15 @@ class User
             $email = $_POST['email'];
             $password = $_POST['psw'];
             $passwordRep = $_POST['psw-repeat'];
-
-            $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-
-            $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt->execute(['name' => $name, 'email' => $email, 'password' => $hash]);
+            require_once './../Model/User.php';
+            $user = new User();
+            $user->create($name,$email,$hash);
 
             header("location: /login");
 
-        }   require_once './get_registration.php';
-
-
+        }   require_once './../View/registrate.php';
 
     }
     private function validate(): array
@@ -76,9 +73,13 @@ class User
                 $errors['psw-repeat'] = 'Пароли не совпадают';
             }
         } return $errors;
-    }
 
-    public function login()
+    }
+    public function getLoginForm()
+    {
+        require_once './../View/login.php';
+    }
+    public function getLogin()
     {
         $errors = [];
 
@@ -100,7 +101,6 @@ class User
 
             $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :login');
             $stmt->execute(['login' => $login]);
-
             $data = $stmt->fetch();
 
             if($data === false) {
@@ -117,13 +117,9 @@ class User
                 }
             }
 
-        } require_once './get_login.php';
+        } require_once './../View/login.php';
 
     }
 
 
 }
-
-//$user = new user();
-//$user->registrate();
-//$user->login();

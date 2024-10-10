@@ -7,9 +7,9 @@
         <label for="name"><b>Name</b></label>
         <label style="color: brown">
             <?php if(isset($errors['name'])): ?>
-            <?php print_r($errors['name']);?>
+                <?php print_r($errors['name']);?>
             <?php endif?> </label>
-            <?php // <?php print_r($errors['name']) ?? '' ?>
+        <?php // <?php print_r($errors['name']) ?? '' ?>
 
 
         <input type="text" placeholder="Enter Name" name="name" id="name" required>
@@ -17,21 +17,21 @@
         <label for="email"><b>Email</b></label>
         <label style="color: brown">
             <?php if(isset($errors['email'])): ?>
-            <?php print_r($errors['email']);?>
+                <?php print_r($errors['email']);?>
             <?php endif?></label>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label for="psw"><b>Password</b></label>
         <label style="color: brown">
             <?php if(isset($errors['psw'])): ?>
-            <?php print_r($errors['psw']);?>
+                <?php print_r($errors['psw']);?>
             <?php endif?></label>
         <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
         <label for="psw-repeat"><b>Repeat Password</b></label>
         <label style="color: brown">
             <?php if(isset($errors['psw-repeat'])): ?>
-            <?php print_r($errors['psw-repeat']);?>
+                <?php print_r($errors['psw-repeat']);?>
             <?php endif?></label>
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
         <hr>

@@ -1,8 +1,6 @@
 <?php
-
-require_once './classes/Product.php';
-$basket = new Product();
-$basket->basket();
+$basket = new BasketController();
+$basket->getBasket();
 $products = $basket->products;
 ?>
 

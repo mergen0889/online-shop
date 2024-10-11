@@ -1,21 +1,27 @@
 <?php
+
+require_once './../Model/Product.php';
+
 class ProductController
 {
+    private Product $userProduct;
+    private Product $products;
 
-    public $products;
+    public function __construct()
+    {
+        $this->userProduct = new Product();
+        $this->products = new Product();
+    }
     public function getCatalog()
     {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            header("location: /login");
-        }
+//        session_start();
+//        if (!isset($_SESSION['user_id'])) {
+//            header("location: /login");
+//        }
 
-        $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-
-        $stmt = $pdo->query("SELECT * FROM products");
-
-        $products = $stmt->fetchAll();
-        $this->products = $products;
+        //$product = new Product();
+        $products = $this->products->getProducts();
+        require_once './../View/catalog.php';
     }
 
     public function getProductForm()
@@ -36,25 +42,26 @@ class ProductController
             $amount = $_POST['amount'];
             $userId = $_SESSION['user_id'];
 
-            require_once './../Model/UserProduct.php';
-            $userProduct = new UserProduct();
-            $result = $userProduct->getByUserIdAndProductId($userId, $productId);
-            //$result = $userProduct->result;
-            //
+            //$userProduct = new Product();
+            $result = $this->userProduct->getByUserIdAndProductId($userId, $productId);
+
             if ($result) {
                 $amountSum = $result['amount'] + $amount;
-                //$amountUpd = $pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :user_id AND product_id = :product_id");
-                //$amountUpd->execute(['amount' => $amountSum, 'user_id' => $userId, 'product_id' => $productId]);
-                $userProduct = new UserProduct();
-                $amountUpd = $userProduct->getUpdateUserProduct();
 
-                if ($amountUpd) {
+                //$userProduct = new Product();
+                $amountUpd = $this->userProduct->updateUserProduct($amountSum, $userId, $productId);
+
+                if (!$amountUpd) {
                     $add = 'Add to basket successfully';
+                } else {
+                    $add = 'Товар не добавлен в корзину';
                 }
             } else {
-                $product = $userProduct->getInsertUserProduct();
-                if ($product) {
+                $product = $this->userProduct->insertUserProduct($userId, $productId, $amount);
+                if (!$product) {
                     $add = 'Add to basket successfully';
+                } else {
+                    $add = 'Товар не добавлен в корзину';
                 }
             }
 
@@ -87,7 +94,7 @@ class ProductController
             } elseif (!ctype_digit($productId)) {
                 $errors['product_id'] = 'Поле должно содержать только цифры';
             } else {
-                $userProduct = new UserProduct();
+                $userProduct = new Product();
                 $res = $userProduct->getByProductId($productId);
 
                 if ($res === false) {

@@ -1,10 +1,4 @@
-<?php
 
-$catalog = new ProductController();
-$catalog->getCatalog();
-$products = $catalog->products;
-
-?>
 
 <div class="container">
     <h2>Catalog </h2>

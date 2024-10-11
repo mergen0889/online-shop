@@ -39,7 +39,8 @@ if($requestUri === '/login') {
 } elseif($requestUri === '/catalog') {
 
     if ($requestMethod === 'GET') {
-        require_once './../View/catalog.php';
+        $productController = new ProductController();
+        $productController->getCatalog();
 
     } else {
           echo "$requestMethod не поддерживается адресом $requestUri";
@@ -62,7 +63,8 @@ if($requestUri === '/login') {
 } elseif($requestUri === '/basket') {
 
     if ($requestMethod === 'GET') {
-        require_once './../View/basket.php';
+        $basket = new BasketController();
+        $basket->getBasket();
 
     } else {
         echo "$requestMethod не поддерживается адресом $requestUri";

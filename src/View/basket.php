@@ -1,11 +1,6 @@
-<?php
-$basket = new BasketController();
-$basket->getBasket();
-$products = $basket->products;
-?>
 
 <div class="container">
-    <h2>Catalog </h2>
+    <h2>Basket </h2>
 
     <div class="card-deck">
 

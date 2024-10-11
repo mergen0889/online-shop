@@ -1,6 +1,15 @@
 <?php
+require_once './../Model/User.php';
+
 class UserController
 {
+    private User $user;
+
+    public function __construct()
+    {
+        $this->user = new User();
+    }
+
     public function getRegistrateForm()
     {
         require_once './../View/registrate.php';
@@ -16,9 +25,8 @@ class UserController
             $passwordRep = $_POST['psw-repeat'];
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            require_once './../Model/User.php';
-            $user = new User();
-            $user->create($name,$email,$hash);
+            //$user = new User();
+            $this->user->create($name,$email,$hash);
 
             header("location: /login");
 
@@ -61,7 +69,6 @@ class UserController
                 $errors['psw'] = 'Поле должно быть заполнено';
             } elseif (strlen($password) < 5) {
                 $errors['psw'] = 'Пароль должен содержать не менее 5 символов';
-
             }
         }
         if (isset($_POST['psw-repeat'])) {
@@ -96,12 +103,8 @@ class UserController
         }
 
         if (empty($errors)) {
-
-            $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-
-            $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :login');
-            $stmt->execute(['login' => $login]);
-            $data = $stmt->fetch();
+            //$user = new User();
+            $data = $this->user->getEmail($login);
 
             if($data === false) {
                 $errors['login'] = 'Пароль или логин неверный';

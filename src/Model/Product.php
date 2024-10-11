@@ -1,6 +1,6 @@
 <?php
 
-class UserProduct
+class Product
 {
 
     public function getByUserIdAndProductId(int $userId, int $productId): array|false
@@ -23,7 +23,7 @@ class UserProduct
         return $res;
     }
 
-    public function getUpdateUserProduct(int $amountSum, int $userId, int $productId)
+    public function updateUserProduct(int $amountSum, int $userId, int $productId)
     {
         $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
         $amountUpd = $pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :user_id AND product_id = :product_id");
@@ -31,7 +31,7 @@ class UserProduct
 
     }
 
-    public function getInsertUserProduct(int $userId, int $productId, int $amount)
+    public function insertUserProduct(int $userId, int $productId, int $amount)
     {
         $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
         $product = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
@@ -39,15 +39,14 @@ class UserProduct
 
     }
 
-//    public function getUserCatalog(): array
-//    {
-//        $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
-//
-//        $stmt = $pdo->query("SELECT * FROM products");
-//
-//        $products = $stmt->fetchAll();
-//
-//        return $products;
-//    }
+    public function getProducts():array
+    {
+        $pdo = new PDO("pgsql:host=online-shop-1-postgres-1; port=5432; dbname=mydb", 'user', 'pass');
+
+        $stmt = $pdo->query("SELECT * FROM products");
+
+        $products = $stmt->fetchAll();
+        return $products;
+    }
 
 }

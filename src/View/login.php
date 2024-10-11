@@ -6,12 +6,12 @@
     <div class="container">
         <label for="login"><b>Email</b></label>
         <label style="color: darkred">
-        <?php echo $errors['login'] ?? ''; ?> </label>
+            <?php echo $errors['login'] ?? ''; ?> </label>
         <input type="text" placeholder="Enter Email" name="login" required>
 
         <label for="psw"><b>Password</b></label>
         <label style="color: darkred">
-        <?php  echo $errors['psw'] ?? ''; ?> </label>
+            <?php  echo $errors['psw'] ?? ''; ?> </label>
         <input type="password" placeholder="Enter Password" name="psw" required>
 
         <button type="submit">Login</button>
@@ -99,4 +99,5 @@
         }
     }
 </style>
+
 

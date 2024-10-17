@@ -9,10 +9,10 @@
             <?php echo $errors['login'] ?? ''; ?> </label>
         <input type="text" placeholder="Enter Email" name="login" required>
 
-        <label for="psw"><b>Password</b></label>
+        <label for="password"><b>Password</b></label>
         <label style="color: darkred">
-            <?php  echo $errors['psw'] ?? ''; ?> </label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+            <?php  echo $errors['password'] ?? ''; ?> </label>
+        <input type="password" placeholder="Enter Password" name="password" required>
 
         <button type="submit">Login</button>
         <label>

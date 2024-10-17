@@ -1,77 +1,43 @@
 <?php
-require_once './../Controller/UserController.php';
-require_once './../Controller/ProductController.php';
-require_once './../Controller/BasketController.php';
+use core\app;
 
-$requestUri = $_SERVER['REQUEST_URI'];
-$requestMethod = $_SERVER['REQUEST_METHOD']; //'GET', 'POST'
+//$autholoadController = function (string $controllerName)
+//{
+//    $path =  "./../Controller/$controllerName.php";
+//    if(file_exists($path))
+//    {
+//        require_once $path;
+//        return true;
+//    }
+//    return false;
+//};
+//
+//$autholoadModel = function (string $modelName)
+//{
+//    $path = "./../Model/$modelName.php";
+//    if(file_exists($path))
+//    {
+//        require_once $path;
+//        return true;
+//    }
+//    return false;
+//};
 
-if($requestUri === '/login') {
+//spl_autoload_register($autholoadController);
+//spl_autoload_register($autholoadModel);
 
-    if ($requestMethod === 'GET') {
+$autholoadController = function (string $controllerName)
+{
+    $path = './../' . str_replace('\\' , '/' , $controllerName) . '.php';
 
-        $userController = new UserController();
-        $userController->getLoginForm();
-
-    } elseif ($requestMethod ==='POST') {
-
-        $userController = new UserController();
-        $userController->getLogin();
-
-    } else {
-       echo "$requestMethod не поддерживается адресом $requestUri";
+    if(file_exists($path))
+    {
+        require_once $path;
+        return true;
     }
-} elseif ($requestUri === '/registration') {
+    return false;
+};
 
-    if ($requestMethod === 'GET') {
-
-        $userController = new UserController();
-        $userController->getRegistrateForm();
-
-    } elseif ($requestMethod ==='POST') {
-
-        $userController = new UserController();
-        $userController->registrate();
-
-    } else {
-        echo "$requestMethod не поддерживается адресом $requestUri";
-    }
-} elseif($requestUri === '/catalog') {
-
-    if ($requestMethod === 'GET') {
-        $productController = new ProductController();
-        $productController->getCatalog();
-
-    } else {
-          echo "$requestMethod не поддерживается адресом $requestUri";
-    }
-} elseif($requestUri === '/add-product') {
-
-    if ($requestMethod === 'GET') {
-
-        $productController = new ProductController();
-        $productController->getProductForm();
-
-    } elseif ($requestMethod === 'POST') {
-
-        $productController = new ProductController();
-        $productController->addProduct();
-
-    } else {
-        echo "$requestMethod не поддерживается адресом $requestUri";
-    }
-} elseif($requestUri === '/basket') {
-
-    if ($requestMethod === 'GET') {
-        $basket = new BasketController();
-        $basket->getBasket();
-
-    } else {
-        echo "$requestMethod не поддерживается адресом $requestUri";
-    }
-}
-else {
-    http_response_code(404);
-    require_once './../View/404.php';
-}
-
+spl_autoload_register($autholoadController);
+$app = new App();
+$app->run();

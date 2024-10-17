@@ -1,6 +1,6 @@
 <?php
-require_once './../Model/User.php';
-
+namespace Controller;
+use Model\User;
 class UserController
 {
     private User $user;
@@ -9,120 +9,151 @@ class UserController
     {
         $this->user = new User();
     }
-
     public function getRegistrateForm()
     {
-        require_once './../View/registrate.php';
+        require_once "./../View/registrate.php";
     }
     public function registrate()
     {
-        $errors = $this->validate();
-
-        if(empty($errors)) {
+        $errors = $this->validateRegistration();
+        if (empty($errors)) {
             $name = $_POST['name'];
             $email = $_POST['email'];
-            $password = $_POST['psw'];
-            $passwordRep = $_POST['psw-repeat'];
-            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $pass = $_POST['password'];
+            $repass = $_POST['repassword'];
 
-            //$user = new User();
-            $this->user->create($name,$email,$hash);
+            $hash = password_hash($pass, PASSWORD_DEFAULT);
 
-            header("location: /login");
+            $this->user->createNewUser($name, $email, $hash);
+            header('Location: /login');
+        }
 
-        }   require_once './../View/registrate.php';
+        require_once "./../View/registrate.php";
 
     }
-    private function validate(): array
+
+    private function validateRegistration()
     {
         $errors = [];
 
-        if (isset($_POST['name'])) {
+        if(isset($_POST['name']) ){
+
             $name = $_POST['name'];
+
             if (empty($name)) {
-                $errors['name'] = 'Имя не должно быть пустым';
-            } elseif (strlen($name) < 4) {
-                $errors['name'] = 'Имя должно содержать не менее 4 символов';
-            } elseif (preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/",$name)){
-                $errors['name'] = 'В имени недопустимый символ';
+                $errors['name'] = "Имя не может быть пустым";
             }
-        } else {
-            $errors['name'] = 'Поле name должно быть заполнено';
+            if($name < 1){
+                $errors['name'] = "Имя должно быть длиннее";
+            }
+            for($i = 0; $i < strlen($name); $i++){
+                if (is_numeric($name[$i])) {
+                    $errors['name'] = "В имени не должно быть цифр";
+                }
+                if ($name[$i] == " ") {
+                    $errors['name'] = "В имени не должно быть пробелов";
+                }
+            }
+            if(!preg_match("#^[\w\-]+$#u",$name)){
+                $errors['name'] = "В имени не должно быть специальных символов";
+            }
+        }
+        else{
+            $errors['name'] = "Поле name должно быть заполнено";
         }
 
-        if (isset($_POST['email'])) {
+        if(isset($_POST['email'])){
             $email = $_POST['email'];
-            if (empty($email)) {
-                $errors['email'] = 'Поле email не должно быть пустым';
-            } elseif (strlen($email) < 5) {
-                $errors['email'] = 'Email должен содержать не менее 5 символов';
-            } elseif (!preg_match('#^([\w]+\.?)+(?<!\.)@(?!\.)[a-zа-я0-9ё\.-]+\.?[a-zа-яё]{2,}$#ui', $email)){
-                $errors['email'] = 'Недопустимый формат email';
+            $true_email = filter_var($email, FILTER_VALIDATE_EMAIL);
+            if(!$true_email){
+                $errors['email'] = "Неправильный email";
+            }
+        }
+        else{
+            $errors['email'] = "Поле email должно быть заполнено";
+        }
+
+        if(isset($_POST['password'])){
+            $pass = $_POST['password'];
+            if (empty($pass)) {
+
+                $errors['password'] = "Пароль не может быть пустым";
+            }
+        }
+        else{
+            $errors['password'] = "Поле password должно быть заполнено";
+        }
+
+        if (isset($_POST['repassword'])){
+            $repass = $_POST['repassword'];
+            $pass = $_POST['password'];
+            if ($pass != $repass) {
+                $errors['repass'] = "Проверьте пароль";
+            }
+            if (empty( $repass)) {
+                $errors['repass'] = "Проверьте пароль";
             }
         } else {
-            $errors['email'] = 'Поле email должно быть заполнено';
+            $errors['repass'] = "Повторите пароль";
         }
-
-        if (isset($_POST['psw'])) {
-            $password = $_POST['psw'];
-            if (empty($password)) {
-                $errors['psw'] = 'Поле должно быть заполнено';
-            } elseif (strlen($password) < 5) {
-                $errors['psw'] = 'Пароль должен содержать не менее 5 символов';
-            }
-        }
-        if (isset($_POST['psw-repeat'])) {
-            $passwordRep = $_POST['psw-repeat'];
-            if (empty($passwordRep)) {
-                $errors['psw-repeat'] = 'Поле не должно быть пустым';
-            }
-            if ($passwordRep !== $password) {
-                $errors['psw-repeat'] = 'Пароли не совпадают';
-            }
-        } return $errors;
-
+        return $errors;
     }
+
     public function getLoginForm()
     {
         require_once './../View/login.php';
     }
-    public function getLogin()
-    {
-        $errors = [];
 
-        if (isset($_POST['login'])) {
+    public function login(){
+
+        $errors = $this->validateLogin();
+
+        if(empty($errors)) {
+
             $login = $_POST['login'];
-        } else {
-            $errors['login'] = 'Логин или пароль неверный';
-        }
+            $pass = $_POST['password'];
 
-        if (isset($_POST['psw'])) {
-            $password = $_POST['psw'];
-        } else {
-            $errors['psw'] = 'Логин или пароль неверный';
-        }
+            $data = $this->user->getByLogin($login);
 
-        if (empty($errors)) {
-            //$user = new User();
-            $data = $this->user->getEmail($login);
+            if($data === false){
+                $errors['login'] = "Пароль или Логин неверный";
 
-            if($data === false) {
-                $errors['login'] = 'Пароль или логин неверный';
             } else {
-                $hashDb = $data['password'];
+                $pass_db = $data['password'] ;
 
-                if(password_verify($password, $hashDb)) {
+                if(password_verify($pass, $pass_db)) {
+
                     session_start();
                     $_SESSION['user_id'] = $data['id'];
-                    header("location: /catalog");
+                    header('Location: /catalog');
                 } else {
-                    $errors['login'] = 'Пароль или логин неверный';
+                    $errors['login'] = "Пароль или Логин неверный";
                 }
             }
 
-        } require_once './../View/login.php';
+        }
+        require_once "./../View/login.php";
 
     }
 
+    private function validateLogin()
+    {
+        $errors = [];
+
+        if(isset($_POST['login'])){
+            $login = $_POST['login'];
+        }
+        else{
+            $errors['login'] = "Поле email должно быть заполнено";
+        }
+
+        if(isset($_POST['password'])){
+            $pass = $_POST['password'];
+        }
+        else{
+            $errors['password'] = "Поле password должно быть заполнено";
+        }
+        return $errors;
+    }
 
 }

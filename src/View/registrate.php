@@ -21,19 +21,19 @@
             <?php endif?></label>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
-        <label for="psw"><b>Password</b></label>
+        <label for="password"><b>Password</b></label>
         <label style="color: brown">
-            <?php if(isset($errors['psw'])): ?>
-                <?php print_r($errors['psw']);?>
+            <?php if(isset($errors['password'])): ?>
+                <?php print_r($errors['password']);?>
             <?php endif?></label>
-        <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+        <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
-        <label for="psw-repeat"><b>Repeat Password</b></label>
+        <label for="repassword"><b>Repeat Password</b></label>
         <label style="color: brown">
-            <?php if(isset($errors['psw-repeat'])): ?>
-                <?php print_r($errors['psw-repeat']);?>
+            <?php if(isset($errors['repassword'])): ?>
+                <?php print_r($errors['repassword']);?>
             <?php endif?></label>
-        <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+        <input type="password" placeholder="Repeat Password" name="repassword" id="repassword" required>
         <hr>
 
         <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
